@@ -3,7 +3,7 @@
 'use strict';
 
 angular.module('yaru22.md', [
-]).directive('md', function () {
+]).directive('md', ['$compile', function ($compile) {
   if (typeof hljs !== 'undefined') {
     marked.setOptions({
       highlight: function (code, lang) {
@@ -24,13 +24,15 @@ angular.module('yaru22.md', [
         // render transcluded text
         var html = marked($elem.text());
         $elem.html(html);
+        $compile($elem.contents())($scope);
         return;
       }
 
       ngModel.$render = function () {
         var html = marked(ngModel.$viewValue || '');
         $elem.html(html);
+        $compile($elem.contents())($scope);
       };
     }  // link function
   };
-});
+}]);
